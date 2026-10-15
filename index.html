@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Parking - Sakshi 21</title>
+<style>
+body{margin:0;font-family:Arial;background:#eef2f7}
+.header{background:#0b3d91;color:#fff;padding:15px;text-align:center}
+.header p{font-size:11px;margin-top:5px;color:#90ff90}
+.box{max-width:900px;margin:15px auto;padding:0 15px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.slot{background:#fff;padding:15px;border-radius:10px;text-align:center;box-shadow:0 2px 6px #0001;border-top:5px solid #00c853}
+.slot.full{border-top-color:#d50000;background:#ffebee}
+.btn{padding:7px 12px;margin:4px;border-radius:20px;border:1px solid #0b3d91;background:#fff;color:#0b3d91;cursor:pointer;font-size:12px}
+.btn.in{background:#0b3d91;color:#fff}
+.btn.out{background:#ff6f00;color:#fff;border-color:#ff6f00}
+.summary{background:#fff;border:2px solid #0b3d91;max-width:900px;margin:15px auto;padding:15px;border-radius:10px}
+.footer{text-align:center;font-size:10px;color:#999;padding:20px}
+</style>
+</head>
+<body>
+
+<div class="header">
+<h2>🅿️ SMART PARKING SYSTEM - iverilog Project</h2>
+<p>Riya Chavan - 18008 | Sakshi-21 | 2000H-2003H | iverilog parking.v</p>
+</div>
+
+<div class="box">
+<div class="slot" id="s0">
+<h3>Slot 1 - 2000H</h3>
+<p id="t0">🟢 FREE - 00H</p>
+<button class="btn in" onclick="park(0,1)">Car Entry</button>
+<button class="btn out" onclick="park(0,0)">Car Exit</button>
+</div>
+
+<div class="slot" id="s1">
+<h3>Slot 2 - 2001H</h3>
+<p id="t1">🟢 FREE - 00H</p>
+<button class="btn in" onclick="park(1,1)">Car Entry</button>
+<button class="btn out" onclick="park(1,0)">Car Exit</button>
+</div>
+
+<div class="slot" id="s2">
+<h3>Slot 3 - 2002H</h3>
+<p id="t2">🟢 FREE - 00H</p>
+<button class="btn in" onclick="park(2,1)">Car Entry</button>
+<button class="btn out" onclick="park(2,0)">Car Exit</button>
+</div>
+
+<div class="slot" id="s3">
+<h3>Slot 4 - 2003H</h3>
+<p id="t3">🟢 FREE - 00H</p>
+<button class="btn in" onclick="park(3,1)">Car Entry</button>
+<button class="btn out" onclick="park(3,0)">Car Exit</button>
+</div>
+</div>
+
+<div class="summary">
+<h3>Parking Status - iverilog Output</h3>
+<p>Total Cars Parked: <b id="total">0</b> / 4</p>
+<p>Parking Full? <b id="full">No - Z Flag 0</b></p>
+<p>Selected Slot (2050H): <b id="sel">None</b></p>
+<p>Last Action: <b id="action">System Ready - LXI H,2000H</b></p>
+<p style="margin-top:10px;font-size:11px;font-family:monospace;background:#000;color:#0f0;padding:8px;border-radius:6px">
+iverilog parking.v -o sim<br>
+vvp sim<br>
+$dumpfile("parking.vcd") - GTKWave Ready
+</p>
+</div>
+
+<div class="footer">
+Smart Parking System | Riya Chavan 18008 | Sakshi-21 | GitHub Pages Live<br>
+https://riyachavan935-ai.github.io/Sakshi-21/ | iverilog + Verilog + HTML Output
+</div>
+
+<script>
+let slots = [0,0,0,0];
+function park(id, entry){
+  let el = document.getElementById('t'+id);
+  let card = document.getElementById('s'+id);
+
+  if(entry==1){
+    if(slots[id]==1){ alert('Already Occupied!'); return; }
+    slots[id]=1;
+    el.innerText = '🔴 OCCUPIED - 01H - Car Present';
+    card.classList.add('full');
+    document.getElementById('action').innerText = 'Slot '+(id+1)+' Booked - MVI M,01H - 200'+id+'H=01H';
+  } else {
+    if(slots[id]==0){ alert('Already Free!'); return; }
+    slots[id]=0;
+    el.innerText = '🟢 FREE - 00H';
+    card.classList.remove('full');
+    document.getElementById('action').innerText = 'Slot '+(id+1)+' Freed - MVI M,00H - 200'+id+'H=00H';
+  }
+
+  document.getElementById('sel').innerText = 'Slot '+(id+1)+' (200'+id+'H)';
+  let total = slots[0]+slots[1]+slots[2]+slots[3];
+  document.getElementById('total').innerText = total;
+  document.getElementById('full').innerText = total==4? 'YES - FULL - Z Flag 1 - FFH' : 'No - Z Flag 0';
+}
+</script>
+
+</body>
+  </html>
